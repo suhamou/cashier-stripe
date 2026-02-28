@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: cashier-stripe
+  r2dbc:
+    url: r2dbc:h2:mem:///cashierdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  sql:
+    init:
+      schema-locations: classpath:schema.sql
+      mode: always
+
+server:
+  port: 8080
+
+stripe:
+  api-key: ${STRIPE_API_KEY:sk_test_placeholder}
+  webhook-secret: ${STRIPE_WEBHOOK_SECRET:whsec_placeholder}
