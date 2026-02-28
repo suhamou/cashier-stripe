@@ -54,11 +54,13 @@ public class SubscriptionService implements SubscriptionUseCase {
 
     @Override
     public Mono<Subscription> resumeSubscription(Long subscriptionId) {
-        // Note: Stripe does not offer a generic "resume" API for canceled subscriptions;
-        // resuming a paused subscription requires a separate Stripe API call.
-        // This updates local state only — extend with stripeGateway as needed.
+        // Only paused subscriptions can be resumed; canceled subscriptions require a new subscription.
         return subscriptionRepository.findById(subscriptionId)
                 .flatMap(subscription -> {
+                    if ("canceled".equals(subscription.getStatus())) {
+                        return Mono.error(new IllegalStateException(
+                                "Cannot resume a canceled subscription. Create a new subscription instead."));
+                    }
                     subscription.setStatus("active");
                     return subscriptionRepository.save(subscription);
                 });

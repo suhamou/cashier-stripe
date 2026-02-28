@@ -10,6 +10,7 @@ public class PaymentMethodService implements PaymentMethodUseCase {
 
     @Override
     public Mono<PaymentMethod> addPaymentMethod(Long customerId, String stripePaymentMethodId) {
+        // TODO: persist via repository and attach to Stripe customer when full implementation is added.
         PaymentMethod paymentMethod = PaymentMethod.builder()
                 .customerId(customerId)
                 .stripeId(stripePaymentMethodId)
